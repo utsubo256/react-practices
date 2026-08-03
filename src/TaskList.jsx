@@ -1,6 +1,6 @@
 import "./TaskList.css";
 
-function TaskList({ tasks, onToggleTask }) {
+function TaskList({ tasks, onToggleTask, onDeleteTask }) {
   const completedTasks = tasks.filter((task) => task.completed);
 
   return (
@@ -23,6 +23,7 @@ function TaskList({ tasks, onToggleTask }) {
                 <span className={task.completed ? "completed" : undefined}>
                   {task.title}
                 </span>
+                <button onClick={() => onDeleteTask(task)}>削除</button>
               </li>
             ))}
           </ul>
