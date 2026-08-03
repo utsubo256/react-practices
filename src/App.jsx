@@ -18,10 +18,20 @@ function App() {
     ]);
   }
 
+  function handleToggleTask(targetTask) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === targetTask.id
+          ? { ...task, completed: !task.completed }
+          : task,
+      ),
+    );
+  }
+
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} onToggleTask={handleToggleTask} />
     </>
   );
 }
