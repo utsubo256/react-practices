@@ -28,10 +28,20 @@ function App() {
     );
   }
 
+  function handleDeleteTask(targetTask) {
+    setTasks((previousTasks) =>
+      previousTasks.filter((task) => task.id !== targetTask.id),
+    );
+  }
+
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
-      <TaskList tasks={tasks} onToggleTask={handleToggleTask} />
+      <TaskList
+        tasks={tasks}
+        onToggleTask={handleToggleTask}
+        onDeleteTask={handleDeleteTask}
+      />
     </>
   );
 }
