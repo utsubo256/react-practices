@@ -32,6 +32,16 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== targetTask.id));
   }
 
+  function handleEditTask(targetTask, newTitle) {
+    if (newTitle.trim() === "") return;
+
+    setTasks(
+      tasks.map((task) =>
+        task.id === targetTask.id ? { ...task, title: newTitle } : task,
+      ),
+    );
+  }
+
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
@@ -39,6 +49,7 @@ function App() {
         tasks={tasks}
         onToggleTask={handleToggleTask}
         onDeleteTask={handleDeleteTask}
+        onEditTask={handleEditTask}
       />
     </>
   );
