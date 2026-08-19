@@ -2,25 +2,17 @@ import { useState } from "react";
 import "./TaskList.css";
 import Task from "./Task";
 
-function TaskList({ tasks, onToggleTask, onDeleteTask, onEditTask }) {
-  const [editingTitle, setEditingTitle] = useState("");
-  const [editingTaskId, setEditingTaskId] = useState(null);
+function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
+  const [editingTask, setEditingTask] = useState(null);
 
   const completedTasks = tasks.filter((task) => task.completed);
 
   function handleStartEditing(task) {
-    setEditingTaskId(task.id);
-    setEditingTitle(task.title);
+    setEditingTask(task);
   }
 
   function handleCancelEditing() {
-    setEditingTaskId(null);
-  }
-
-  function handleSubmitEditing(event, task) {
-    event.preventDefault();
-    onEditTask(task, editingTitle);
-    setEditingTaskId(null);
+    setEditingTask(null);
   }
 
   return (
@@ -37,13 +29,10 @@ function TaskList({ tasks, onToggleTask, onDeleteTask, onEditTask }) {
               <Task
                 key={task.id}
                 task={task}
-                isEditing={task.id === editingTaskId}
-                editingTitle={editingTitle}
-                onEditingTitleChange={setEditingTitle}
+                editingTask={task.id === editingTask?.id ? editingTask : null}
                 onStartEditing={handleStartEditing}
                 onCancelEditing={handleCancelEditing}
-                onSubmitEditing={handleSubmitEditing}
-                onToggleTask={onToggleTask}
+                onUpdateTask={onUpdateTask}
                 onDeleteTask={onDeleteTask}
               />
             ))}

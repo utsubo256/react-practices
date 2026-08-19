@@ -1,26 +1,44 @@
+import { useState } from "react";
 import "./Task.css";
 
 function Task({
   task,
-  isEditing,
-  editingTitle,
-  onEditingTitleChange,
+  editingTask,
   onStartEditing,
   onCancelEditing,
-  onSubmitEditing,
-  onToggleTask,
+  onUpdateTask,
   onDeleteTask,
 }) {
+  const [editingTitle, setEditingTitle] = useState("");
+
+  function handleStartEditing() {
+    setEditingTitle(task.title);
+    onStartEditing(task);
+  }
+
+  function handleSubmitEditing(event) {
+    event.preventDefault();
+    onUpdateTask({
+      ...task,
+      title: editingTitle,
+    });
+    onCancelEditing();
+  }
+
+  function handleToggleTask() {
+    onUpdateTask({
+      ...task,
+      completed: !task.completed,
+    });
+  }
+
   return (
     <li>
-      {isEditing ? (
-        <form
-          className="task-edit-form"
-          onSubmit={(e) => onSubmitEditing(e, task)}
-        >
+      {editingTask ? (
+        <form className="task-edit-form" onSubmit={handleSubmitEditing}>
           <input
             value={editingTitle}
-            onChange={(e) => onEditingTitleChange(e.target.value)}
+            onChange={(e) => setEditingTitle(e.target.value)}
           />
           <button type="submit" disabled={editingTitle.trim() === ""}>
             更新
@@ -34,12 +52,12 @@ function Task({
           <input
             type="checkbox"
             checked={task.completed}
-            onChange={() => onToggleTask(task)}
+            onChange={handleToggleTask}
           />
           <span className={task.completed ? "completed" : undefined}>
             {task.title}
           </span>
-          <button onClick={() => onStartEditing(task)}>編集</button>
+          <button onClick={handleStartEditing}>編集</button>
         </>
       )}
       <button onClick={() => onDeleteTask(task)}>削除</button>

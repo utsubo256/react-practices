@@ -18,13 +18,11 @@ function App() {
     ]);
   }
 
-  function handleToggleTask(targetTask) {
+  function handleUpdateTask(updatedTask) {
+    if (updatedTask.title.trim() === "") return;
+
     setTasks(
-      tasks.map((task) =>
-        task.id === targetTask.id
-          ? { ...task, completed: !task.completed }
-          : task,
-      ),
+      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
     );
   }
 
@@ -32,24 +30,13 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== targetTask.id));
   }
 
-  function handleEditTask(targetTask, newTitle) {
-    if (newTitle.trim() === "") return;
-
-    setTasks(
-      tasks.map((task) =>
-        task.id === targetTask.id ? { ...task, title: newTitle } : task,
-      ),
-    );
-  }
-
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
       <TaskList
         tasks={tasks}
-        onToggleTask={handleToggleTask}
+        onUpdateTask={handleUpdateTask}
         onDeleteTask={handleDeleteTask}
-        onEditTask={handleEditTask}
       />
     </>
   );
