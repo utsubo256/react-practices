@@ -18,7 +18,7 @@ function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
   return (
     <>
       <h2>タスク一覧</h2>
-      {tasks.length ? (
+      {tasks.length !== 0 ? (
         <>
           <p>
             すべてのタスク: {tasks.length}件、完了済タスク:{" "}
