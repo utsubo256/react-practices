@@ -3,16 +3,16 @@ import "./TaskList.css";
 import Task from "./Task";
 
 function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
-  const [editingTask, setEditingTask] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   const completedTasks = tasks.filter((task) => task.completed);
 
-  function handleStartEditing(task) {
-    setEditingTask(task);
+  function handleStartEditing(id) {
+    setEditingTaskId(id);
   }
 
   function handleCancelEditing() {
-    setEditingTask(null);
+    setEditingTaskId(null);
   }
 
   return (
@@ -29,7 +29,7 @@ function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
               <Task
                 key={task.id}
                 task={task}
-                editingTask={task.id === editingTask?.id ? editingTask : null}
+                isEditing={task.id === editingTaskId}
                 onStartEditing={handleStartEditing}
                 onCancelEditing={handleCancelEditing}
                 onUpdateTask={onUpdateTask}

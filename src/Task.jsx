@@ -3,7 +3,7 @@ import "./Task.css";
 
 function Task({
   task,
-  editingTask,
+  isEditing,
   onStartEditing,
   onCancelEditing,
   onUpdateTask,
@@ -13,7 +13,7 @@ function Task({
 
   function handleStartEditing() {
     setEditingTitle(task.title);
-    onStartEditing(task);
+    onStartEditing(task.id);
   }
 
   function handleSubmitEditing(event) {
@@ -34,7 +34,7 @@ function Task({
 
   return (
     <li>
-      {editingTask ? (
+      {isEditing ? (
         <form className="task-edit-form" onSubmit={handleSubmitEditing}>
           <input
             value={editingTitle}
