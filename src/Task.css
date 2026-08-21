@@ -1,0 +1,8 @@
+.task-edit-form {
+  display: inline-flex;
+  align-items: center;
+}
+
+.completed {
+  text-decoration: line-through;
+}
