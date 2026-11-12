@@ -11,6 +11,7 @@ function tasksReducer(state, action) {
           { id: action.id, title: action.title, completed: false },
         ],
         history: [...state.history, state.tasks],
+        redoHistory: [],
       };
     case "updated":
       return {
@@ -18,17 +19,27 @@ function tasksReducer(state, action) {
           task.id === action.task.id ? action.task : task,
         ),
         history: [...state.history, state.tasks],
+        redoHistory: [],
       };
     case "deleted":
       return {
         tasks: state.tasks.filter((task) => task.id !== action.task.id),
         history: [...state.history, state.tasks],
+        redoHistory: [],
       };
     case "undo":
       if (state.history.length === 0) return state;
       return {
         tasks: state.history[state.history.length - 1],
         history: state.history.slice(0, -1),
+        redoHistory: [...state.redoHistory, state.tasks],
+      };
+    case "redo":
+      if (state.redoHistory.length === 0) return state;
+      return {
+        tasks: state.redoHistory[state.redoHistory.length - 1],
+        history: [...state.history, state.tasks],
+        redoHistory: state.redoHistory.slice(0, -1),
       };
     default:
       return state;
@@ -38,6 +49,7 @@ function tasksReducer(state, action) {
 const initialState = {
   tasks: [],
   history: [],
+  redoHistory: [],
 };
 
 function App() {
@@ -73,11 +85,21 @@ function App() {
     dispatch({ type: "undo" });
   }
 
+  function handleRedoHistory() {
+    dispatch({ type: "redo" });
+  }
+
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
       <button onClick={handleUndoHistory} disabled={state.history.length === 0}>
         元に戻す
+      </button>
+      <button
+        onClick={handleRedoHistory}
+        disabled={state.redoHistory.length === 0}
+      >
+        やり直す
       </button>
       <TaskList
         tasks={state.tasks}
