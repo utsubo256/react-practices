@@ -2,26 +2,46 @@ import { useReducer } from "react";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 
-function tasksReducer(tasks, action) {
+function tasksReducer(state, action) {
   switch (action.type) {
     case "added":
-      return [
-        ...tasks,
-        { id: action.id, title: action.title, completed: false },
-      ];
+      return {
+        tasks: [
+          ...state.tasks,
+          { id: action.id, title: action.title, completed: false },
+        ],
+        history: [...state.history, state.tasks],
+      };
     case "updated":
-      return tasks.map((task) =>
-        task.id === action.task.id ? action.task : task,
-      );
+      return {
+        tasks: state.tasks.map((task) =>
+          task.id === action.task.id ? action.task : task,
+        ),
+        history: [...state.history, state.tasks],
+      };
     case "deleted":
-      return tasks.filter((task) => task.id !== action.task.id);
+      return {
+        tasks: state.tasks.filter((task) => task.id !== action.task.id),
+        history: [...state.history, state.tasks],
+      };
+    case "undo":
+      if (state.history.length === 0) return state;
+      return {
+        tasks: state.history[state.history.length - 1],
+        history: state.history.slice(0, -1),
+      };
     default:
-      return tasks;
+      return state;
   }
 }
 
+const initialState = {
+  tasks: [],
+  history: [],
+};
+
 function App() {
-  const [tasks, dispatch] = useReducer(tasksReducer, []);
+  const [state, dispatch] = useReducer(tasksReducer, initialState);
 
   function handleAddTask(title) {
     if (title.trim() === "") return;
@@ -49,11 +69,18 @@ function App() {
     });
   }
 
+  function handleUndoHistory() {
+    dispatch({ type: "undo" });
+  }
+
   return (
     <>
       <TaskForm onAddTask={handleAddTask} />
+      <button onClick={handleUndoHistory} disabled={state.history.length === 0}>
+        元に戻す
+      </button>
       <TaskList
-        tasks={tasks}
+        tasks={state.tasks}
         onUpdateTask={handleUpdateTask}
         onDeleteTask={handleDeleteTask}
       />
