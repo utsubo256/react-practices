@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "./ThemeContext";
 import "./Task.css";
 
 function Task({
@@ -10,6 +11,7 @@ function Task({
   onDeleteTask,
 }) {
   const [editingTitle, setEditingTitle] = useState("");
+  const { isDark } = useContext(ThemeContext);
 
   function handleStartEditing() {
     setEditingTitle(task.title);
@@ -33,7 +35,7 @@ function Task({
   }
 
   return (
-    <li>
+    <li className={`task ${isDark ? "dark" : "light"}`}>
       {isEditing ? (
         <form className="task-edit-form" onSubmit={handleSubmitEditing}>
           <input

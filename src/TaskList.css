@@ -2,3 +2,7 @@
   list-style: none;
   padding-inline-start: 0;
 }
+
+.task-list-area.dark {
+  color: #fff;
+}

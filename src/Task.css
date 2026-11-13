@@ -6,3 +6,7 @@
 .completed {
   text-decoration: line-through;
 }
+
+.task.dark {
+  color: #a3be8c;
+}
