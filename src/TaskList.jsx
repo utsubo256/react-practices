@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "./ThemeContext";
 import "./TaskList.css";
 import Task from "./Task";
 
 function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const { isDark } = useContext(ThemeContext);
 
   const completedTasks = tasks.filter((task) => task.completed);
 
@@ -16,7 +18,7 @@ function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
   }
 
   return (
-    <>
+    <section className={`task-list-area ${isDark ? "dark" : "light"}`}>
       <h2>タスク一覧</h2>
       {tasks.length !== 0 ? (
         <>
@@ -41,7 +43,7 @@ function TaskList({ tasks, onUpdateTask, onDeleteTask }) {
       ) : (
         <p>タスクはまだありません</p>
       )}
-    </>
+    </section>
   );
 }
 

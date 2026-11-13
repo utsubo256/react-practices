@@ -1,4 +1,6 @@
-import { useReducer } from "react";
+import "./App.css";
+import { useContext, useReducer } from "react";
+import { ThemeContext } from "./ThemeContext";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 
@@ -54,6 +56,7 @@ const initialState = {
 
 function App() {
   const [state, dispatch] = useReducer(tasksReducer, initialState);
+  const { isDark, setIsDark } = useContext(ThemeContext);
 
   function handleAddTask(title) {
     if (title.trim() === "") return;
@@ -89,8 +92,15 @@ function App() {
     dispatch({ type: "redo" });
   }
 
+  function toggleDarkMode() {
+    setIsDark((prevIsDark) => !prevIsDark);
+  }
+
   return (
-    <>
+    <div className={`app ${isDark ? "dark" : "light"}`}>
+      <button onClick={toggleDarkMode}>
+        {isDark ? "ライトモード" : "ダークモード"}
+      </button>
       <TaskForm onAddTask={handleAddTask} />
       <button onClick={handleUndoHistory} disabled={state.history.length === 0}>
         元に戻す
@@ -106,7 +116,7 @@ function App() {
         onUpdateTask={handleUpdateTask}
         onDeleteTask={handleDeleteTask}
       />
-    </>
+    </div>
   );
 }
 
